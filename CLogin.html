@@ -1,0 +1,62 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome to Grocery Hawk!</title>
+  <script>
+  $( function() {
+    $( "#tabs" ).tabs({
+      beforeLoad: function( event, ui ) {
+        ui.jqXHR.fail(function() {
+          ui.panel.html(
+            "Couldn't load this tab. We'll try to fix this as soon as possible. " +
+            "If this wouldn't be a demo." );
+        });
+      }
+    });
+  } );
+  var req = new XMLHttpRequest();
+
+function askServer() {
+
+  var name1 = document.getElementById("name1").value;
+  var email1 = document.getElementById("email1").value;
+  var datepicker = document.getElementById("datepicker").value;
+
+  var dataToSend = "?name1=" + name1 + "&email1=" + email1+"&datepicker="+datepicker;
+  req.open("GET", "a.php" + dataToSend, true);
+  req.onreadystatechange = handleServerResponse;
+  req.send();
+
+  document.getElementById("result").innerHTML = "The request has been sent.";
+}
+
+function handleServerResponse() {
+  if ((req.readyState == 4) && (req.status == 200))
+ {
+    var result = 
+req.responseText;
+    document.getElementById("result").innerHTML = result;
+  }
+}
+
+  </script>
+</head>
+<body>
+ 
+ 
+<form id="form1" action="#" onsubmit="askServer()" style="font-family: Arial,Helvetica,sans-serif;text-align:center;">
+  <h1>Customer Login</h1><br><br>
+    <label for="name1">Account Name <em>*</em></label>
+      <input id="name1" autofocus required><br><br>
+    <label for="pswd">Password <em>*</em></label>
+      <input id="pswd" type="text" required><br><br>
+    <p><button type="submit">Login</button><button type="submit">Guest Login</button></p><br><br>
+    <a href="NLogin.html">New customer? Please create a new account.</a>
+    <p id="result"></p>
+ 
+  </form>
+ 
+</body>
+</html>
