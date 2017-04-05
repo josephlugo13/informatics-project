@@ -1,0 +1,25 @@
+
+.table {
+    margin: 0px auto;
+}
+
+#grid td {
+    text-align: center;
+    font-size: 0.8em;
+    padding-top: -5em;
+}
+
+div {
+	margin-bottom: 0.5em;
+}
+
+#quantity {
+	margin-top: 0.5em;
+	margin-right: -2em;
+	padding-left: 8em;
+}
+
+nav {
+	padding-top: 1em;
+	padding-left: 5em;
+}
