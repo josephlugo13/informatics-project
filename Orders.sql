@@ -4,12 +4,12 @@ DROP TABLE IF EXISTS orders;
 
 
 CREATE TABLE orders(
-	orderNumber INT NOT NULL AUTO_INCREMENT,
+	id INT NOT NULL AUTO_INCREMENT,
 	customerName VARCHAR(100) NOT NULL,
 	itemsOrdered VARCHAR(250) NOT NULL,
 	totalPrice DECIMAL(6,2) NOT NULL,
 	orderStatus VARCHAR(100) NOT NULL,
-	PRIMARY KEY(orderNumber)
+	PRIMARY KEY(id)
 );
 
 
