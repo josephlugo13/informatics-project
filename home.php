@@ -1,10 +1,23 @@
-﻿<!doctype html>
+﻿
+<?php
+// kicks users if they haven't logged in yet
+	session_start();
+	if (!isset($_SESSION['email'])){
+		header('Location: customerLogin.php');
+		exit;
+	}
+
+
+
+?>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 	<Link rel="stylesheet" href="main.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
   <title>Welcome to Grocery Hawk!</title>
 </head>
 <body>
@@ -73,44 +86,90 @@
 					</table>
 		</div>
 		<div class="col-sm-10">
-			<nav class="row">
-				<div class="col-sm-2" style="padding-top: 0.5em;">Welcome User001!</div>
-				<div class="col-sm-10">
-					<div class="btn-group" role="group" aria-label="Basic example">
-						<button type="button" class="btn btn-secondary col-sm-3">Account Information</button>
-						<button type="button" class="btn btn-secondary col-sm-3">Order History</button>
-						<button type="button" class="btn btn-secondary col-sm-3">Order status</button>
-						<button type="button" class="btn btn-secondary col-sm-3">Deal</button>
-						<button type="button" class="btn btn-secondary col-sm-3">Language</button>
-						<button type="button" class="btn btn-secondary col-sm-3">Help</button>
-					</div>
-				</div>
-				<!--<table class="table">
-					<tbody>
-						<tr>
-							<td>
-								Welcome User!
-							</td>
-							<td>
-								<a href="">Account Information</a>
-							</td>
-							<td>
-								<a href="">Order History</a>
-							</td>
-							<td>
-								<a href="">Order status</a>
-							</td>
-							<td>
-								<a href="">Deals</a>
-							</td>
-							<td>
-								<a href="">Help</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>-->
+			<!--div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
+				    <div class="container-fluid">
+				        	<p class="navbar-text">
+							<?php $display=$_SESSION['email'];
+							echo "Welcome $display!";?>
+							</p>
+				            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+				            </button>
+				        </div>
+				        <div class="collapse navbar-collapse navbar-menubuilder">
+				            <ul class="nav navbar-nav navbar-left">
+				                <li><a href="/">Home</a>
+				                </li>
+				                <li><a href="/products">Products</a>
+				                </li>
+				                <li><a href="/about-us">About Us</a>
+				                </li>
+				                <li><a href="/contact">Contact Us</a>
+				                </li>
+				            </ul>
+				        </div>
+				    </div-->
+			<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+			<p class="navbar-text">
+			<?php $display=$_SESSION['email'];
+			echo "Welcome $display!";?>
+			</p>
+				<nav class="navbar navbar-default">
+					  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+					    <div class="navbar-nav">
+					        <a class="nav-item nav-link" href="">Account Information</a>
+					        <a class="nav-item nav-link" href="">Order History</a>
+					        <a class="nav-item nav-link" href="">Order status</a>
+					        <a class="nav-item nav-link" href="">Deal</a>
+					        <a class="nav-item nav-link" href="">Language</a>
+					        <a class="nav-item nav-link" href="">Help</a>
+					        <a class="nav-item nav-link" href="customerLogout.php">log out</a>
+					     </div>
+					  </div>
+					</nav>
 			</nav>
-			<div class="row" id="grid">
+			<table class="table table-hover">
+				<!-- headers for table -->
+				
+			<?php
+				/*
+				 *List all products in the database
+				 *
+				 */
+				include_once('config.php');
+				include_once('dbutils.php');
+	
+				
+				//conect to the database
+				$db = connectDB($DBHost,$DBUser, $DBPasswd, $DBName);
+				
+				// set up a query to get info on the cars form the db
+				$query = "SELECT inventory.category, inventory.product, inventory.unit, inventory.price, inventory.stock, inventory.id FROM inventory;";
+				
+				//run the query
+				$result = queryDB($query, $db);
+				
+				
+				
+				
+				while($row = nextTuple($result)) {
+					
+					echo "\n <tr>";
+					//echo "<td>" . $row['category'] . "</td>";
+					echo "<td>" . $row['product'] . "</td>";
+					echo "<td> $" . $row['price'] . "</td>";
+					echo "<td>" . $row['stock'] . " left in stock</td>";
+					// link to update record (item)
+			        echo "<td><a href='updateInventory.php?id=" . $row['id']  .  "'>Add to cart</a></td>";
+					// link to delete record (item)
+					echo "</tr> \n";
+					
+				}
+
+
+			?>
+
+			</table>
+			<!--div class="row" id="grid">
 			<table class="table">
 				<tbody>
 					<tr>
@@ -339,7 +398,7 @@
 					</tr>
 				</tbody>
 			</table>
-			</div>
+			</div-->
 		</div>
   </div>
   
