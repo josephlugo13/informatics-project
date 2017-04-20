@@ -29,9 +29,9 @@ include_once('dbutils.php');
   <div class="container-fluid">
     <ul class="nav navbar-nav navbar-left">
         <li><a href="grocer_input.php"><span class="glyphicon glyphicon-grain"></span> Inventory</a></li>
-        <li class="active"><a href="grocerOrders.php"><span class="glyphicon glyphicon-hourglass"></span> Waiting Orders</a></li>
+        <li><a href="grocerOrders.php"><span class="glyphicon glyphicon-hourglass"></span> Waiting Orders</a></li>
 		<li><a href="grocerOrders2.php"><span class="glyphicon glyphicon-send"></span> Delivered Orders</a></li>
-		<li><a href="grocerOrders3.php"><span class="glyphicon glyphicon-remove"></span> Returned Orders</a></li>
+		<li class="active"><a href="grocerOrders3.php"><span class="glyphicon glyphicon-remove"></span> Returned Orders</a></li>
      </ul>
      <ul class="nav navbar-nav navbar-right">
         <li><a href="grocerLogout.php"><span class="glyphicon glyphicon-log-out"></span> log out</a></li>
@@ -42,7 +42,7 @@ include_once('dbutils.php');
 <!-- Title -->	
 <div class="row">
 	<div class="col-xs-12">
-		   <h1>Waiting Orders</h1>
+		   <h1>Returned Orders</h1>
 	</div>
 </div>
 <style type="text/css">
@@ -93,7 +93,7 @@ include_once('dbutils.php');
 	$db = connectDB($DBHost,$DBUser, $DBPasswd, $DBName);
 	
 	// set up a query to get info on the order form the db
-	$query = "SELECT orders.id, orders.customerName, orders.itemsOrdered, orders.totalPrice, orders.orderStatus FROM orders WHERE orderStatus='Waiting to be Delivered';";
+	$query = "SELECT orders.id, orders.customerName, orders.itemsOrdered, orders.totalPrice, orders.orderStatus FROM orders WHERE orderStatus='Returned to Store';";
 	
 	//run the query
 	$result = queryDB($query, $db);
@@ -110,7 +110,7 @@ include_once('dbutils.php');
 		echo "<td>" . $row['totalPrice'] . "</td>";
 		echo "<td>" . $row['orderStatus'] . "</td>";
 		// link to update record (item)
-        echo "<td><a href='updateOrder.php?id=" . $row['id']  .  "'>edit</a></td>";
+        echo "<td><a href='updateOrder3.php?id=" . $row['id']  .  "'>edit</a></td>";
 		echo "</tr> \n";
 		
 	}

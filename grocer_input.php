@@ -79,7 +79,7 @@ if (isset($_POST['submit'])) {
 
 	
 		// put together SQL statement to insert new record
-		$query = "INSERT INTO inventory(category, product, unit, price, stock) VALUES ('$category', '$product', $unit, $price, $stock);";
+		$query = "INSERT INTO inventory(category, product, unit, price, stock) VALUES ('$category', '$product', '$unit', $price, $stock);";
 		
 		// connect to db
 		$db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
@@ -99,25 +99,38 @@ if (isset($_POST['submit'])) {
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <ul class="nav navbar-nav navbar-left">
-        <li class="active"><a href="grocer_input.php">Inventory</a></li>
-        <li><a href="grocerOrders.php">Orders</a></li>
+        <li class="active"><a href="grocer_input.php"><span class="glyphicon glyphicon-grain"></span> Inventory</a></li>
+        <li><a href="grocerOrders.php"><span class="glyphicon glyphicon-hourglass"></span> Waiting Orders</a></li>
+		<li><a href="grocerOrders2.php"><span class="glyphicon glyphicon-send"></span> Delivered Orders</a></li>
+		<li><a href="grocerOrders3.php"><span class="glyphicon glyphicon-remove"></span> Returned Orders</a></li>
      </ul>
      <ul class="nav navbar-nav navbar-right">
-        <li><a href="grocerLogout.php">log out</a></li>
+        <li><a href="grocerLogout.php"><span class="glyphicon glyphicon-log-out"></span> log out</a></li>
      </ul>
   </div>
 </nav>
 
 <!-- Title -->	
 <div class="row">
-	<div class="col-xs-12">
+	<div class="col-xs-12" style="margin-left: 10px;">
 		   <h1>Inventory</h1>
 	</div>
 </div>
+  <style type="text/css">
+        body {
+            border-top: 5px solid #ffcc00;
+            background-image: -ms-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: -moz-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: -o-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffeeaa), color-stop(1, #EEEEEE));
+            background-image: -webkit-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: linear-gradient(to bottom, #ffeeaa 0%, #EEEEEE 100%);
+        }
+    </style>
 
 <!-- welcome user -->
 <div class="row">
-    <div class="col-xs-12">
+    <div class="col-xs-12" style="margin-left: 10px;">
         <p>Welcome <?php echo $_SESSION['email']; ?></p>
     </div>
 </div>
@@ -139,9 +152,9 @@ if (isset($_POST['submit'])) {
 </div>
 
 
-<!-- Form to enter cars -->
+<!-- Form to enter items -->
 <div class="row">
-	<div class="col-xs-12">
+	<div class="col-xs-12" style="margin-left: 10px;">
 		
 <form action="grocer_input.php" method="post">
 
@@ -160,7 +173,7 @@ if (isset($_POST['submit'])) {
 <!-- Unit -->
 <div class="form-group">
 	<label for="unit">Unit: </label>
-	<input type="number" class="form-control" name="unit" value="<?php if($unit) { echo $unit;} ?>" />
+	<input type="text" class="form-control" name="unit" value="<?php if($unit) { echo $unit;} ?>" />
 </div>
 
 <!-- Price -->
@@ -175,7 +188,7 @@ if (isset($_POST['submit'])) {
 	<input type="number" class="form-control" name="stock" value="<?php if($stock) { echo $stock;} ?>" />
 </div>
 	
-<button type="submit" class="btn btn-default" name="submit">Save</button>
+<button type="submit" class="btn btn-default" name="submit"><span class="glyphicon glyphicon-save"></span> Save</button>
 	
 
 </form>
@@ -188,9 +201,9 @@ if (isset($_POST['submit'])) {
 
 
 
-<!-- show contents of cars table -->
+<!-- show contents of items table -->
 <div class="row">
-	<div class="col-xs-12">
+	<div class="col-xs-12" style="margin-left: 10px;">
 		
 <!-- Set up html table to show contents -->
 <table class="table table-hover">

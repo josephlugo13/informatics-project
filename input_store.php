@@ -26,9 +26,22 @@
 <!-- Visible title -->
         <div class="row">
             <div class="col-xs-12">
+				<center>
                 <h1>Enter Users</h1>
+				</center>
             </div>
         </div>
+		<style type="text/css">
+        body {
+            border-top: 5px solid #ffcc00;
+            background-image: -ms-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: -moz-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: -o-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffeeaa), color-stop(1, #EEEEEE));
+            background-image: -webkit-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: linear-gradient(to bottom, #ffeeaa 0%, #EEEEEE 100%);
+        }
+		</style>
         
 <!-- Processing form input -->        
         <div class="row">
@@ -121,7 +134,7 @@ if (isset($_POST['submit'])) {
 
 <!-- form for inputting data -->
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-4" style="left: 35%">
                 
 <form action="input_store.php" method="post">
 <!-- email -->
