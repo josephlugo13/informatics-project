@@ -9,6 +9,6 @@
 	
 	
 	//redirect user to grocerLogin.php
-	header("Location: customerSide.php");
+	header("Location: grocerLogin.php");
 	exit;
 ?>
