@@ -26,7 +26,9 @@
 <!-- Visible title -->
         <div class="row">
             <div class="col-xs-12">
+				<center>
                 <h1>Login</h1>
+				</center>
             </div>
         </div>
 		<style type="text/css">
@@ -95,7 +97,7 @@ if (isset($_POST['submit'])) {
 			// start a session
 			if (session_start()) {
 				$_SESSION['email'] = $email;
-				header('Location: customerSide.php');
+				header('Location: grocer_input.php');
 				exit;
 			} else {
 				// if we can't start a session
@@ -103,11 +105,11 @@ if (isset($_POST['submit'])) {
 			}
 		} else {
 			// wrong password
-			punt("Wrong password. <a href='customerLogin.php'>Try again</a>.");
+			punt("Wrong password. <a href='grocerLogin.php'>Try again</a>.");
 		}
     } else {
 		// email entered is not in the users table
-		punt("This email is not in our system. <a href='customerLogin.php'>Try again</a>.");
+		punt("This email is not in our system. <a href='grocerLogin.php'>Try again</a>.");
 	}
 }
 ?>
@@ -116,9 +118,9 @@ if (isset($_POST['submit'])) {
 
 <!-- form for inputting data -->
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-3" style="left: 37.5%">
                 
-<form action="customerLogin.php" method="post">
+<center><form action="grocerLogin.php" method="post">
 <!-- email -->
     <div class="form-group">
         <label for="email">Email</label>
@@ -132,8 +134,9 @@ if (isset($_POST['submit'])) {
     </div>
 
     <button type="submit" class="btn btn-default" name="submit">Login</button>
-	<a class="btn btn-default" href="newCustomer.php" role="button">Create Account</a>
+	<a class="btn btn-default" href="input_store.php" role="button">Create Account</a>
 </form>
+</center>
                 
             </div>
         </div>
