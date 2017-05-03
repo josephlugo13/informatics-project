@@ -119,8 +119,6 @@ if(isset($_SESSION["cart_products"]) && count($_SESSION["cart_products"])>0)
 		$unit = $cart_itm["unit"];
 		$price = $cart_itm["price"];
 		$code = $cart_itm["code"];
-		$bg_color = ($b++%2==1) ? 'odd' : 'even'; //zebra stripe
-		echo '<tr class="'.$bg_color.'">';
 		echo '<td>Qty <input type="text" size="2" maxlength="2" name="unit['.$code.']" value="'.$unit.'" /></td>';
 		echo '<td>'.$product.'</td>';
 		echo '<td><input type="checkbox" name="remove_code[]" value="'.$code.'" /> Remove</td>';
@@ -182,7 +180,6 @@ $products_item .= <<<EOT
 	Price {$currency}{$obj->price} 
 	
 	<fieldset>
-	
 	<label>
 		<span>Quantity</span>
 		<input type="text" size="2" maxlength="2" name="unit" value="1" />

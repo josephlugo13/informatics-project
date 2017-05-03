@@ -40,27 +40,26 @@ if(isset($_POST["type"]) && $_POST["type"]=='add' && $_POST["unit"]>0)
 	$db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
 	
 	// set up a query to get info on the cars form the db
-	$query = "SELECT product, price FROM inventory WHERE id=" . $new_product['id'] . " LIMIT 1";
-	
+	//$query = "SELECT product, price, id FROM inventory WHERE id=" . $new_product['orderedProducts.id'] . " LIMIT 1";
+	$query="SELECT product, price, id FROM inventory join items on id=i where StoreID=$storeID AND orderID=$order;";
 	//run the query
 	$result = queryDB($query, $db);
 	
 	$tuple = nextTuple($result);
-	
 	//fetch product name, price from db and add to new_product array
-        $new_product["product"] = $product; 
-        $new_product["price"] = $price;
+        $new_product['product'] = $product; 
+        $new_product['price'] = $price;
         
         if(isset($_SESSION["cart_products"])){  //if session var already exist
-            if(isset($_SESSION["cart_products"][$new_product['id']])) //check item exist in products array
+            if(isset($_SESSION["cart_products"][$new_product['orderedProducts.id']])) //check item exist in products array
             {
-                unset($_SESSION["cart_products"][$new_product['id']]); //unset old array item
+                unset($_SESSION["cart_products"][$new_product['orderedProducts.id']]); //unset old array item
             }           
         }
-        $_SESSION["cart_products"][$new_product['id']] = $new_product; //update or create product session with new item
+        $_SESSION["cart_products"][$new_product['orderedProducts.id']] = $new_product; //update or create product session with new item
 		
     }
-}
+
 
 /*
 //update or remove items 
