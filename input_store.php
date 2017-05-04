@@ -7,7 +7,7 @@
 <html>
     <head>
 
-<title>Login</title>
+<title>Enter Users</title>
 
 <!-- This is the code from bootstrap -->        
 <!-- Latest compiled and minified CSS -->
@@ -26,7 +26,9 @@
 <!-- Visible title -->
         <div class="row">
             <div class="col-xs-12">
-                <h1>Login</h1>
+				<center>
+                <h1>Enter Users</h1>
+				</center>
             </div>
         </div>
 		<style type="text/css">
@@ -55,6 +57,7 @@ if (isset($_POST['submit'])) {
     // get data from form
     $email = $_POST['email'];
 	$password = $_POST['password'];
+	$password2 = $_POST['password2'];
     
    // connect to the database
     $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);    
@@ -73,57 +76,78 @@ if (isset($_POST['submit'])) {
     if (!$password) {
         $errorMessage .= " Please enter a password.";
         $isComplete = false;
-    }	    
-	
-    if (!$isComplete) {
-        punt($errorMessage);
     }
+	
+	if (!$password2) {
+        $errorMessage .= " Please enter a password again.";
+        $isComplete = false;
+    }
+	
+	if ($password != $password2) {
+		$errorMessage .= " Your two passwords are not the same.";
+		$isComplete = false;
+	}
+	    
+	
+    if ($isComplete) {
     
-    // get the hashed password from the user with the email that got entered
-    $query = "SELECT hashedpass FROM customers WHERE email='" . $email . "';";
-    $result = queryDB($query, $db);
-    if (nTuples($result) > 0) {
-        // there is an account that corresponds to the email that the user entered
-		// get the hashed password for that account
-		$row = nextTuple($result);
-		$hashedpass = $row['hashedpass'];
-		
-		// compare entered password to the password on the database
-		if ($hashedpass == crypt($password, $hashedpass)) {
-			// password was entered correctly
+		// check if there's a user with the same email
+		$query = "SELECT * FROM users WHERE email='" . $email . "';";
+		$result = queryDB($query, $db);
+		if (nTuples($result) == 0) {
+			// if we're here it means there's already a user with the same email
 			
-			// start a session
-			if (session_start()) {
-				$_SESSION['email'] = $email;
-				header('Location: customerSide.php');
-				exit;
-			} else {
-				// if we can't start a session
-				punt("Unable to start session when loggin in.");
-			}
+			// generate the hashed version of the password
+			$hashedpass = crypt($password, getSalt());
+			
+			// put together sql code to insert tuple or record
+			$insert = "INSERT INTO users(email, hashedpass) VALUES ('" . $email . "', '" . $hashedpass . "');";
+		
+			// run the insert statement
+			$result = queryDB($insert, $db);
+			
+			// we have successfully inserted the record
+			echo ("Successfully entered " . $email . " into the database.");
 		} else {
-			// wrong password
-			punt("Wrong password. <a href='customerLogin.php'>Try again</a>.");
+			$isComplete = false;
+			$errorMessage = "Sorry. Another account has been created under email " . $email;
 		}
-    } else {
-		// email entered is not in the users table
-		punt("This email is not in our system. <a href='customerLogin.php'>Try again</a>.");
 	}
 }
 ?>
             </div>
         </div>
+		
+		
+<!-- Showing errors, if any -->
+<div class="row">
+    <div class="col-xs-12">
+<?php
+    if (isset($isComplete) && !$isComplete) {
+        echo '<div class="alert alert-danger" role="alert">';
+        echo ($errorMessage);
+        echo '</div>';
+    }
+?>            
+    </div>
+</div>
 
 <!-- form for inputting data -->
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-4" style="left: 35%">
                 
-<form action="customerLogin.php" method="post">
+<form action="input_store.php" method="post">
 <!-- email -->
     <div class="form-group">
-        <label for="email">Email</label>
+        <label for="email">Email Address</label>
         <input type="email" class="form-control" name="email"/>
     </div>
+	
+<!-- Store Name -->
+	<div class="form-group">
+		<label for="storeName">Store Name</label>
+		<input type="text" class="form-control" name="name"/>
+	</div>
 
 <!-- password1 -->
     <div class="form-group">
@@ -131,14 +155,19 @@ if (isset($_POST['submit'])) {
         <input type="password" class="form-control" name="password"/>
     </div>
 
-    <button type="submit" class="btn btn-default" name="submit">Login</button>
-	<a class="btn btn-default" href="newCustomer.php" role="button">Create Account</a>
+<!-- password2 -->
+    <div class="form-group">
+        <label for="password2">Re-enter Password</label>
+        <input type="password" class="form-control" name="password2"/>
+    </div>
+    
+    <button type="submit" class="btn btn-default" name="submit">Add</button>
+	<a class="btn btn-default" href="grocerLogin.php" role="button">Cancel</a>
 </form>
                 
             </div>
         </div>
-            
-</div>        
+      
 
         
     </body>

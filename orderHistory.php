@@ -33,17 +33,11 @@ include_once('dbutils.php');
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <ul class="nav navbar-nav navbar-left">
-        <li class="active"><a href="customerSide.php"><span class="glyphicon glyphicon-grain"></span> Inventory</a></li>
-        <li><a href="customerOrders.php"><span class="glyphicon glyphicon-tags"></span>  Orders</a></li>
+        <li><a href="customerSide.php"><span class="glyphicon glyphicon-grain"></span> Inventory</a></li>
+        <li class="active"><a href="orderHistory.php"><span class="glyphicon glyphicon-tags"></span> Order History</a></li>
      </ul>
      <ul class="nav navbar-nav navbar-right">
 		<li>
-		<form class="navbar-form navbar-left" role="search">
-			<div class="form-group">
-				<input type="text" class="form-control" placeholder="Search" name="term" id=“term”>
-				</div>
-			<button type="submit" class="btn btn-default">Go!</button>
-			</form>
 		</li>
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php
@@ -59,7 +53,7 @@ include_once('dbutils.php');
 			?><span class="caret"></span></a>
 			<ul class="dropdown-menu">
 			<?php if(isset($_SESSION['email'])){ echo"
-            <li><a href='orderHistory.php'>Order History</a></li>
+            <li><a href='orderHistery.php'>Order History</a></li>
             <li><a href='orderStatus.php'>Order Status</a></li>
             <!--li role='separator' class='divider'></li-->";}
              else{
@@ -100,97 +94,52 @@ include_once('dbutils.php');
 
 <div class="row">
 	<div class="col-xs-12">
-<h1 align="center">Products</h1>		
+<h1 align="center">Order History</h1>		
 <!-- Set up html table to show contents -->
 <table class="table table-hover">
 	<!-- headers for table -->
 	<thead>
-		<th>Images</th>
-		<th>Category</th>
-		<th>Product</th>
-		<th>Unit</th>
-		<th>Price</th>
-		<th>Stock</th>
-		<th>Add to Cart</th>
+		<th>Items Ordered</th>
+		<th>Total Price</th>
+		<th>Date Ordered</th>
+		<th> </th>
 		<th> </th>
 	</thead>
 
-<!-- Products List Start -->
 <?php
 	/*
 	 *List all products in the database
 	 *
 	 */
-	//$storeID=$_SESSION['StoreID'];
-	session_start();
-	if (isset($_SESSION['newOrder'])){
-		$currentOrder=$_SESSION['newOrder'];
-		}
-		else{
-			$newOrder=$_SESSION['newOrder'];
-			}
-
-	//connect to the database
-	$db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
 	
-	$term = $_GET['term'];
-	if (!empty($term)) {
-	// set up a query to get info on the cars form the db
-	$query = "SELECT inventory.id, inventory.image, inventory.category, inventory.product, inventory.unit, inventory.price, inventory.stock FROM inventory WHERE inventory.product LIKE '%".$term."%' OR inventory.category LIKE '%".$term."%';";
-
-	//run the query
-	$result = queryDB($query, $db);
-		while($row = nextTuple($result)) {
-		$quantity=$row['quantity'];
-		echo "\n <tr>";
-		echo "<td>";
-        if($row['image']){
-            $imageLocation=$row['image'];
-            echo "<img src=$imageLocation width='70'>";
-        }
-        echo "</td>";
-		echo "<td>" . $row['category'] . "</td>";
-		echo "<td>" . $row['product'] . "</td>";
-		echo "<td>" . $row['unit'] . "</td>";
-		echo "<td>" . $row['price'] . "</td>";
-		echo "<td>" . $row['stock'] . "</td>";
-		//adding to cart pulls up the shopping cart page and adds to the cart
-		echo "<td><a href='viewCart.php?id=" . $row['id']  .  "'>Add to Cart</a></td>";
-		echo "</tr> \n";
-	}
-	}
-		else{
-// set up a query to get info on the cars form the db
-	$query = "SELECT inventory.id, inventory.image, inventory.category, inventory.product, inventory.unit, inventory.price, inventory.stock FROM inventory;";
+	
+	//conect to the database
+	$db = connectDB($DBHost,$DBUser, $DBPasswd, $DBName);
+	
+	// set up a query to get info on the order form the db
+	$query = "SELECT orders.id, orders.customerName, orders.itemsOrdered, orders.totalPrice, orders.orderStatus FROM orders order by orderStatus;";
 	
 	//run the query
 	$result = queryDB($query, $db);
 	
-		while($row = nextTuple($result)) {
-		$quantity=$row['quantity'];
+	while($row = nextTuple($result)) {
+		$dateOrdered="12/30/2016";
 		echo "\n <tr>";
-		echo "<td>";
-        if($row['image']){
-            $imageLocation=$row['image'];
-            echo "<img src=$imageLocation width='70'>";
-        }
-        echo "</td>";
-		echo "<td>" . $row['category'] . "</td>";
-		echo "<td>" . $row['product'] . "</td>";
-		echo "<td>" . $row['unit'] . "</td>";
-		echo "<td>" . $row['price'] . "</td>";
-		echo "<td>" . $row['stock'] . "</td>";
-		echo "<td><a href='viewCart.php?id=" . $row['id']  .  "'>Add to Cart</a></td>";
+		echo "<td>" . $row['itemsOrdered'] . "</td>";
+		echo "<td>" . $row['totalPrice'] . "</td>";
+		echo "<td>" . $dateOrdered. "</td>";
 		echo "</tr> \n";
+		
 	}
-	}
-	
 ?>
-	</table>
+		</table>
+		</div>
+	<div class="col-xs-1"></div>
 	</div>
 </div>
 
-<?php if (!empty($term)) echo "<a href='customerSide.php' class='btn btn-default glyphicon glyphicon-menu-left'>Back</a>";?>
-<!-- Products List End -->
-</body>
+
+
+
+	</body>
 </html>
