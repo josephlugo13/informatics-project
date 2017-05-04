@@ -130,7 +130,7 @@ if (isset($_POST['submit'])) {
         <input type="email" class="form-control" name="email"/>
     </div>
 	
-<!-- Store Name -->
+<!-- Customer Name -->
 	<div class="form-group">
 		<label for="storeName">Customer Name</label>
 		<input type="text" class="form-control" name="name"/>

@@ -15,19 +15,17 @@
         // process the update if the form was submitted
         
         // get data from form
-        $orderNumber = $_POST['orderNumber'];
-        if (!isset($orderNumber)) {
+        $id = $_POST['id'];
+        if (!isset($id)) {
             // if for some reason the id didn't post, kick them back to grocerOrders.php
             header('Location: grocerOrders.php');
             exit;
         }
 
         // get data from form
-        $category = $_POST['category'];
-        $product = $_POST['product'];
-        $unit = $_POST['unit'];
-        $price = $_POST['price'];
-        $stock = $_POST['stock'];
+        $id = $_POST['id'];
+        
+        $orderStatus = $_POST['orderStatus'];
         
         
         // variable to keep track if the form is complete (set to false if there are any issues with data)
@@ -38,24 +36,9 @@
         
         
         // check each of the required variables in the table        
-        if (!isset($category)) {
-            $errorMessage .= "Please enter a category for the item.\n";
-            $isComplete = false;
-        }
-		if (!isset($product)){
-			$errorMessage .= "Please enter a product name for the item. \n";
-			$isComplete = false;
-		}
-        if (!isset($unit)){
-			$errorMessage .= "Please enter a unit for the item. \n";
-			$isComplete = false;
-		}
-		if (!isset($price)){
-			$errorMessage .= "Please enter a price for the item. \n";
-			$isComplete = false;
-		}
-		if (!isset($stock)){
-			$errorMessage .= "Please enter a stock for the item. \n";
+		
+		if (!isset($orderStatus)){
+			$errorMessage .= "Please enter the status for the order. \n";
 			$isComplete = false;
 		}
         
@@ -66,10 +49,10 @@
             // if there's no error, then we need to update
             
             //
-            // first update inventory record
+            // first update order record
             //
             // put together SQL statement to update item
-            $query = "UPDATE inventory SET category='$category', product='$product', unit=$unit, price=$price, stock=$stock WHERE id=$id;";
+            $query = "UPDATE orders SET orderStatus='$orderStatus' WHERE id=$id;";
             
             // connect to the database
             $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
@@ -78,8 +61,8 @@
             $result = queryDB($query, $db);            
                     
             
-            // now that we are done, send user back to pizza.php and exit 
-            header("Location: grocer_input.php?successmessage=Successfully updated item $product");
+            // now that we are done, send user back to grocerOrders and exit 
+            header("Location: grocerOrders.php?successmessage=Successfully updated order $id");
             exit;
         }        
     } else {
@@ -95,12 +78,12 @@
             // if the id was not passed through the url
             
             // send them out to grocer_input.php and stop executing code in this page
-            header('Location: grocer_input.php');
+            header('Location: grocerOrders.php');
             exit;
         }
         
         /*
-         * Now we'll check to make sure the id passed through the GET variable matches the id of a item in the database
+         * Now we'll check to make sure the id passed through the GET variable matches the orderNumber of a order in the database
          */
         
         // connect to the database
@@ -108,15 +91,15 @@
         
         // set up a query
         $id = $_GET['id'];
-        $query = "SELECT * FROM inventory WHERE id=$id;";
+        $query = "SELECT * FROM orders WHERE id=$id;";
         
         // run the query
         $result = queryDB($query, $db);
         
-        // if the id is not in the inventory table, then we need to send the user back to grocer_input.php
+        // if the id is not in the inventory table, then we need to send the user back to grocerOrders.php
         if (nTuples($result) == 0) {
-            // send them out to pizza.php and stop executing code in this page
-            header('Location: grocer_input.php');
+            // send them out to grocerOrders and stop executing code in this page
+            header('Location: grocerOrders.php');
             exit;
         }
         
@@ -127,11 +110,7 @@
         // get data on item to fill out form with existing values
         $row = nextTuple($result);
         
-        $category = $row['category'];
-        $product = $row['product'];
-        $unit = $row['unit'];
-        $price = $row['price'];
-        $stock = $row['stock'];
+        $orderStatus = $row['orderStatus'];
         
         
     }
@@ -151,7 +130,7 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>        
         
-        <title>Update inventory <?php echo $product; ?></title>
+        <title>Update order <?php echo $id; ?></title>
     </head>
     
     <body>
@@ -159,9 +138,20 @@
 <!-- Title -->
 <div class="row">
     <div class="col-xs-12">
-        <h1>Update inventory <?php echo $product ?></h1>        
+        <h1>Update order: <?php echo $id ?></h1>        
     </div>
 </div>
+<style type="text/css">
+        body {
+            border-top: 5px solid #ffcc00;
+            background-image: -ms-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: -moz-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: -o-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffeeaa), color-stop(1, #EEEEEE));
+            background-image: -webkit-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: linear-gradient(to bottom, #ffeeaa 0%, #EEEEEE 100%);
+        }
+</style>
 
 
 <!-- Showing errors, if any -->
@@ -182,43 +172,27 @@
 
 
 
-<!-- form to update pizza -->
+<!-- form to update order -->
 <div class="row">
     <div class="col-xs-12">
         
-<form action="updateInventory.php" method="post">
-<!-- Category -->
-<div class="form-group">
-    <label for="category">Category:</label>
-    <input type="text" class="form-control" name="category" value="<?php if($category) { echo $category; } ?>"/>
-</div>
+<form action="updateOrder.php" method="post">
 
-<!-- Product -->
-<div class="form-group">
-    <label for="product">Product:</label>
-    <input type="text" class="form-control" name="product" value="<?php if($product) { echo $product; } ?>"/?
-</div>
 
-<!-- Unit -->
+<!-- orderStatus -->
 <div class="form-group">
-    <label for="unit">Unit:</label>
-    <input type="number" class="form-control" name="unit" value="<?php if($unit) { echo $unit; } ?>"/>
-</div>
-
-<!-- Price -->
-<div class="form-group">
-    <label for="price">Price:</label>
-    <input type="number" min="0" step=".01" class="form-control" name="price" value="<?php if($price) { echo $price; } ?>"/>
-</div>
-
-<!-- Stock -->
-<div class="form-group">
-	<label for="stock">Stock: </label>
-	<input type="number" class="form-control" name="stock" value="<?php  if($stock) { echo $stock; } ?>"/>
+	<label for="orderStatus">Order Status: </label>
+	<form action="updateOrder.php">
+	<select name="orderStatus">
+		<option value="Waiting to be Delivered" selected>Waiting to be Delivered</option>
+		<option value="Delivered">Delivered</option>
+		<option value="Returned to Store">Returned to Store</option>
+	</select>
+	<br><br>
 </div>
 
 
-<!-- hidden id (not visible to user, but need to be part of form submission so we know which pizza we are updating -->
+<!-- hidden id (not visible to user, but need to be part of form submission so we know which order we are updating -->
 <input type="hidden" name="id" value="<?php echo $id; ?>"/>
 
 <button type="submit" class="btn btn-default" name="submit">Save</button>

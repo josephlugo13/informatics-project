@@ -126,7 +126,7 @@ include_once('dbutils.php');
 		echo "<td>" . $row['unit'] . "</td>";
 		echo "<td>" . $row['price'] . "</td>";
 		echo "<td>" . $row['stock'] . "</td>";
-		echo "<td><a href='shopCart.php.php?id=" . $row['id']  .  "'>Add to Cart</a></td>";
+		echo "<td><a href='shopCart.php?id=" . $row['id']  .  "'>Add to Cart</a></td>";
 		echo "</tr> \n";
 	}
 	

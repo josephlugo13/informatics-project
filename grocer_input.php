@@ -41,6 +41,7 @@ if (isset($_POST['submit'])) {
 	//if we are here, form was sumbitted and needs to process form data
 	
 	//get data from form
+	$image = $_POST['image'];
 	$category = $_POST['category'];
 	$product = $_POST['product'];
 	$unit = $_POST['unit'];
@@ -53,6 +54,10 @@ if (isset($_POST['submit'])) {
 	// error message if issues with data
 	$errorMessage = "";
 	
+	if (!$image) {
+		$errorMessage .= "Please enter a category for the new item. \n";
+		$isComplete = false;
+	}
 	if (!$category) {
 		$errorMessage .= "Please enter a category for the new item. \n";
 		$isComplete = false;
@@ -79,7 +84,7 @@ if (isset($_POST['submit'])) {
 
 	
 		// put together SQL statement to insert new record
-		$query = "INSERT INTO inventory(category, product, unit, price, stock) VALUES ('$category', '$product', '$unit', $price, $stock);";
+		$query = "INSERT INTO inventory(image, category, product, unit, price, stock) VALUES ('$image', '$category', '$product', '$unit', $price, $stock);";
 		
 		// connect to db
 		$db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
@@ -158,6 +163,12 @@ if (isset($_POST['submit'])) {
 		
 <form action="grocer_input.php" method="post">
 
+<!-- image -->
+<div class="form-group">
+	<label for="image">Image: </label>
+	<input type="text" class="form-control" name="image" value="<?php if($image) { echo $image;} ?>" />
+</div>
+
 <!-- Category -->
 <div class="form-group">
 	<label for="category">Category: </label>
@@ -209,6 +220,7 @@ if (isset($_POST['submit'])) {
 <table class="table table-hover">
 	<!-- headers for table -->
 	<thead>
+		<!-- <th>Image</th> -->
 		<th>Category</th>
 		<th>Product</th>
 		<th>Unit</th>
@@ -229,8 +241,8 @@ if (isset($_POST['submit'])) {
 	//conect to the database
 	$db = connectDB($DBHost,$DBUser, $DBPasswd, $DBName);
 	
-	// set up a query to get info on the cars form the db
-	$query = "SELECT inventory.category, inventory.product, inventory.unit, inventory.price, inventory.stock, inventory.id FROM inventory;";
+	// set up a query to get info on the item form the db
+	$query = "SELECT inventory.image, inventory.category, inventory.product, inventory.unit, inventory.price, inventory.stock, inventory.id FROM inventory;";
 	
 	//run the query
 	$result = queryDB($query, $db);
@@ -241,6 +253,7 @@ if (isset($_POST['submit'])) {
 	while($row = nextTuple($result)) {
 		
 		echo "\n <tr>";
+		/*echo "<td>" . $row['image'] . "</td>";*/
 		echo "<td>" . $row['category'] . "</td>";
 		echo "<td>" . $row['product'] . "</td>";
 		echo "<td>" . $row['unit'] . "</td>";

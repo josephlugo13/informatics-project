@@ -115,6 +115,17 @@
 		<h1>Do you want to delete the <?php echo $product; ?> item?</h1>
 	</div>
 </div>
+<style type="text/css">
+        body {
+            border-top: 5px solid #ffcc00;
+            background-image: -ms-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: -moz-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: -o-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffeeaa), color-stop(1, #EEEEEE));
+            background-image: -webkit-linear-gradient(top, #ffeeaa 0%, #EEEEEE 100%);
+            background-image: linear-gradient(to bottom, #ffeeaa 0%, #EEEEEE 100%);
+        }
+</style>
 
 <!-- form to ask users to confirm deletion -->
 <div class="row">
